@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TestArea from "./TestArea";
 import { useTypingTest } from "../../hooks/useTypingTest";
 import ToolBar from "./ToolBar";
