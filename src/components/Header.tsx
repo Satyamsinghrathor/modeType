@@ -79,7 +79,9 @@ export default function Header() {
             <Keyboard size={19} />
           </NavLink>
 
-          <button onClick={() => loadDummyData()}>
+          <button 
+          // onClick={() => loadDummyData()}
+          >
             <Crown size={20} className="text-[var(--text-secondary)]" />
           </button>
 
