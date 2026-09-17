@@ -178,8 +178,17 @@ function onSelectorChange(selector: number) {
     navigate,
   ]);
 
-  return (
-    <div className="flex h-screen flex-col">
+return (
+  <div className="relative flex h-screen flex-col">
+
+    {/* Toolbar */}
+    <div
+      className={`transition-all duration-500 ${
+        startedTimer
+          ? "pointer-events-none blur-sm opacity-30"
+          : "blur-0 opacity-100"
+      }`}
+    >
       <ToolBar
         onModeChange={onModeChange}
         onTypeChange={onTypeChange}
@@ -188,21 +197,25 @@ function onSelectorChange(selector: number) {
         type={type}
         selector={selector}
       />
-      <main className="flex flex-1 items-center justify-center">
-      <div className="-translate-y-24 w-full">
-      <TestArea
-        timeorwords={selector}
-        text={text}
-        currentIndex={currentIndex}
-        textArray={textArray}
-        mode={mode}
-        selector={selector}
-        wordsTyped={wordsTyped}
-        wpm={wpm}
-        elapsedTime={elapsedTime}
-        timerStarted={startedTimer}
-        /></div>
-        </main>
     </div>
-  );
+
+    {/* Test area */}
+    <main className="relative z-10 flex flex-1 items-center justify-center">
+      <div className="-translate-y-24 w-full">
+        <TestArea
+          timeorwords={selector}
+          text={text}
+          currentIndex={currentIndex}
+          textArray={textArray}
+          mode={mode}
+          selector={selector}
+          wordsTyped={wordsTyped}
+          wpm={wpm}
+          elapsedTime={elapsedTime}
+          timerStarted={startedTimer}
+        />
+      </div>
+    </main>
+  </div>
+);
 }

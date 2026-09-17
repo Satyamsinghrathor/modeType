@@ -83,68 +83,75 @@ return (
     {/* Typing viewport */}
     <div className="relative mx-auto h-[220px] w-[70vw] overflow-hidden px-8">
 
-      {/* Timer / Words - top left */}
-      <div className="absolute left-8 top-2 z-10 flex items-center gap-5">
-        {timerStarted ? (
-          <>
-            <span className="text-2xl font-semibold text-[var(--caret)]">
-              {mode === "time"
-                ? `${Math.ceil(selector - elapsedTime)}s`
-                : `${Math.floor(wordsTyped)}/${selector}`}
-            </span>
+      {/* Header */}
+      <div className="absolute left-8 right-8 top-2 z-20 flex items-center justify-between">
+        
+        {/* Timer / Words + WPM */}
+        <div className="flex items-center gap-5">
+          {timerStarted ? (
+            <>
+              <span className="text-2xl font-semibold text-[var(--caret)]">
+                {mode === "time"
+                  ? `${Math.ceil(selector - elapsedTime)}s`
+                  : `${Math.floor(wordsTyped)}/${selector}`}
+              </span>
 
+              <span className="text-2xl font-semibold text-[var(--caret)]">
+                {wpm} WPM
+              </span>
+            </>
+          ) : (
             <span className="text-2xl font-semibold text-[var(--caret)]">
-              {wpm} WPM
+              {timeorwords}
+              {mode === "time" ? "s" : " words"}
             </span>
-          </>
-        ) : (
-          <span className="text-2xl font-semibold text-[var(--caret)]">
-            {timeorwords}
-            {mode === "time" ? "s" : " words"}
-          </span>
-        )}
+          )}
+        </div>
+
+        {/* Options */}
+        <div className="flex items-center gap-6 text-sm text-[var(--text-muted)]">
+          {/* selector / options */}
+        </div>
       </div>
 
-      {/* Options - top right */}
-      <div className="absolute right-8 top-3 z-10 flex items-center gap-6 text-sm text-[var(--text-muted)]">
-      </div>
-
-      {/* Text + Caret */}
-      <div
-        className="relative pt-14 font-mono text-3xl leading-[1.8] tracking-wide transition-transform duration-200"
-        style={{
-          transform: `translateY(-${offset}px)`,
-        }}
-      >
-        {/* Text */}
-        {text.split("").map((char, index) => (
-          <span
-            key={index}
-            ref={(el) => {
-              charRefs.current[index] = el;
-            }}
-            className={
-              index < currentIndex
-                ? textArray[index] === 1
-                  ? "text-[var(--text-primary)]"
-                  : textArray[index] === 0
-                    ? "text-[var(--error)]"
-                    : "text-[var(--text-secondary)]"
-                : "text-[var(--text-muted)]"
-            }
-          >
-            {char}
-          </span>
-        ))}
-
-        {/* Caret */}
+      {/* Text viewport */}
+      <div className="absolute inset-x-8 top-14 bottom-0 overflow-hidden">
         <div
-          className="absolute h-12 w-[3px] bg-[var(--caret)] transition-all duration-100"
+          className="relative font-mono text-3xl leading-[1.8] tracking-wide transition-transform duration-200"
           style={{
-            left: `${caretPosition.left}px`,
-            top: `${caretPosition.top}px`,
+            transform: `translateY(-${offset}px)`,
           }}
-        />
+        >
+          {/* Text */}
+          {text.split("").map((char, index) => (
+            <span
+              key={index}
+              ref={(el) => {
+                charRefs.current[index] = el;
+              }}
+              className={
+                index < currentIndex
+                  ? textArray[index] === 1
+                    ? "text-[var(--text-primary)]"
+                    : textArray[index] === 0
+                      ? "text-[var(--error)]"
+                      : "text-[var(--text-secondary)]"
+                  : "text-[var(--text-muted)]"
+              }
+            >
+              {char}
+            </span>
+          ))}
+
+          {/* Caret */}
+          <div
+            className="absolute h-12 w-[3px] bg-[var(--caret)] transition-all duration-100"
+            style={{
+              left: `${caretPosition.left}px`,
+              top: `${caretPosition.top}px`,
+            }}
+          />
+        </div>
       </div>
     </div>
   </div>
