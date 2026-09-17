@@ -1,8 +1,9 @@
 import type { TypingTestResult } from "../models/testResultType";
 
-export type Range = "week" | "month" | "year";
+export type Range = "day" | "week" | "month" | "year";
 
 const RANGE_DAYS: Record<Range, number> = {
+  day: 1,
   week: 7,
   month: 30,
   year: 365,
@@ -125,7 +126,34 @@ function filterByRange(
   range: Range,
   filter: StatFilter
 ): TypingTestResult[] {
-  const cutoff = Date.now() - RANGE_DAYS[range] * 24 * 60 * 60 * 1000;
+  const now = new Date();
+
+  if (range === "day") {
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+
+    const endOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1
+    );
+
+    return results.filter((r) => {
+      const date = new Date(r.date).getTime();
+
+      return (
+        matchesFilter(r, filter) &&
+        date >= startOfDay.getTime() &&
+        date < endOfDay.getTime()
+      );
+    });
+  }
+
+  const cutoff =
+    Date.now() - RANGE_DAYS[range] * 24 * 60 * 60 * 1000;
 
   return results.filter(
     (r) => matchesFilter(r, filter) && new Date(r.date).getTime() >= cutoff

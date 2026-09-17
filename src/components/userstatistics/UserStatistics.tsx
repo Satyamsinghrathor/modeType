@@ -18,9 +18,10 @@ import {
   type Range,
   type StatFilter,
 } from "../../utils/aggregateStats";
-import StatCard from "../dashboard/StatCard";
+import StatsCard from "../dashboard/StatsCard";
 
 const RANGES: { id: Range; label: string }[] = [
+  { id: "day", label: "today" },
   { id: "week", label: "week" },
   { id: "month", label: "month" },
   { id: "year", label: "year" },
@@ -204,33 +205,31 @@ export default function UserStatistics() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard
+        <StatsCard
           label="wpm (real)"
-          value={Math.round(summary.wpmReal.best)}
-          subValue={`low ${Math.round(summary.wpmReal.low)} · avg ${Math.round(
-            summary.wpmReal.avg
-          )}`}
+          best={Math.round(summary.wpmReal.best)}
+          avg={Math.round(summary.wpmReal.avg)}
+          low={Math.round(summary.wpmReal.low)}
         />
-        <StatCard
+        <StatsCard
           label="wpm (raw)"
-          value={Math.round(summary.wpmRaw.best)}
-          subValue={`low ${Math.round(summary.wpmRaw.low)} · avg ${Math.round(
-            summary.wpmRaw.avg
-          )}`}
+          best={Math.round(summary.wpmRaw.best)}
+          avg={Math.round(summary.wpmRaw.avg)}
+          low={Math.round(summary.wpmRaw.low)}
         />
-        <StatCard
+
+        <StatsCard
           label="accuracy (real)"
-          value={`${Math.round(summary.accReal.best)}%`}
-          subValue={`low ${Math.round(summary.accReal.low)}% · avg ${Math.round(
-            summary.accReal.avg
-          )}%`}
+          best={`${Math.round(summary.accReal.best)}%`}
+          avg={`${Math.round(summary.accReal.avg)}%`}
+          low={`${Math.round(summary.accReal.low)}%`}
         />
-        <StatCard
+
+        <StatsCard
           label="accuracy (clean)"
-          value={`${Math.round(summary.accClean.best)}%`}
-          subValue={`low ${Math.round(summary.accClean.low)}% · avg ${Math.round(
-            summary.accClean.avg
-          )}%`}
+          best={`${Math.round(summary.accClean.best)}%`}
+          avg={`${Math.round(summary.accClean.avg)}%`}
+          low={`${Math.round(summary.accClean.low)}%`}
         />
       </div>
     </div>
