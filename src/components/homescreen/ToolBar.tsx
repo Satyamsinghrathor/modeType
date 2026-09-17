@@ -8,6 +8,9 @@ type ToolBarProps = {
   onModeChange: (mode: string) => void;
   onTypeChange: (type: string) => void;
   onSelectorChange: (selector: number) => void;
+  mode: string;
+  type: string;
+  selector: number;
 };
 
 
@@ -16,15 +19,12 @@ type ToolBarProps = {
 
 
 export default function ToolBar(
-  { onModeChange, onTypeChange, onSelectorChange }: ToolBarProps
+  { onModeChange, onTypeChange, onSelectorChange, mode , type , selector }: ToolBarProps
 ) {
 
   const modes = testModes;
   const types = testTypes;
 
-  const [type, setType] = useState("accuracy");
-  const [mode, setMode] = useState("time");
-  const [selector, setSelector] = useState(15);
 
 
 
@@ -41,7 +41,7 @@ export default function ToolBar(
         {types.map((item) => (
           <button
             key={item}
-            onClick={() => {setType(item)
+            onClick={() => {
 
               onTypeChange(item);
 
@@ -66,8 +66,8 @@ export default function ToolBar(
           <button
             key={item}
             onClick={() => {
-              setMode(item);
-              setSelector(item === "time" ? 15 : 10);
+              
+              
 
               onModeChange(item);
               onSelectorChange(item === "time" ? 15 : 10);
@@ -91,7 +91,7 @@ export default function ToolBar(
         {selectors.map((item) => (
           <button
             key={item}
-            onClick={() => { setSelector(item); onSelectorChange(item); }}
+            onClick={() => {  onSelectorChange(item); }}
             className={`
               rounded-md px-3 py-2 text-sm transition
               ${

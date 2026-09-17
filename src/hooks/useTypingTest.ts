@@ -188,6 +188,7 @@ export function useTypingTest(text: string) {
        * Space
        */
       if (e.key === " ") {
+        e.preventDefault();
         setTextArray((prev) => [
           ...prev,
           currentText[index] === " " ? 1 : -1,

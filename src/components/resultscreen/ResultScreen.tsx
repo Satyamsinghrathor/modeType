@@ -18,6 +18,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import Alert, { type AlertData } from "../ui/Alert";
 
 type TestResultProps = {
   wpm: number;
@@ -35,6 +36,8 @@ type TestResultProps = {
   mode: string;
   type: string;
   selector: number;
+  resultSaved: boolean;
+  alerts: AlertData[];
 };
 
 export default function TestResult({
@@ -52,7 +55,8 @@ export default function TestResult({
   consistency,
             mode,
           type,
-          selector
+          selector,
+          alerts
 }: TestResultProps) {
 
   const navigate = useNavigate()
@@ -60,13 +64,13 @@ export default function TestResult({
     useEffect(() => {
       function handleKeyDown(e: KeyboardEvent) {
 
-              if (e.key === "Tab") {
+        if (e.key === "Tab") {
         e.preventDefault();
         navigate("/")
         return;
       }
 
-      if(e.key == ""){
+      if(e.key == " "){
         e.preventDefault()
         return;
       }
@@ -118,7 +122,17 @@ export default function TestResult({
     <div className="min-h-screen bg-[var(--bg-primary)] px-4 py-8 font-mono text-[var(--text-muted)] sm:px-6 lg:px-8">
       <main className="mx-auto max-w-[1400px]">
 
-
+      <div className="fixed right-7 top-12 z-50 flex flex-col gap-3">
+        {alerts.map((alert, index) => (
+          <Alert
+            key={index}
+            type={alert.type}
+            title={alert.title}
+          >
+            {alert.msg}
+          </Alert>
+        ))}
+      </div>
         {/* ================= MAIN CARD ================= */}
 
         <section className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-secondary)] p-5 shadow-xl sm:p-7 lg:p-8">

@@ -7,13 +7,48 @@ import { useNavigate } from "react-router-dom";
 import getTypingWords from "../../hooks/useGetTypingWords";
 import { saveTestResult } from "../../localstorage/testStorage";
 import { saveMistakes } from "../../localstorage/mistakeStorage";
+import type { AlertType } from "../ui/Alert";
+import { getmodeTypeTime, saveModeTypeTime, type ModeTypeSelector } from "../../localstorage/modetypetimeStorage";
 
 export default function HomeWindow() {
   const navigate = useNavigate();
+const [settings, setSettings] = useState<ModeTypeSelector>(
+  () => getmodeTypeTime()
+);
 
-  const [mode, setMode] = useState("time");
-  const [type, setType] = useState("accuracy");
-  const [selector, setSelector] = useState(15);
+const { mode, type, selector } = settings;
+
+useEffect(() => {
+  saveModeTypeTime(settings);
+}, [settings]);
+
+function onModeChange(mode: string) {
+  setSettings(prev => ({
+    ...prev,
+    mode,
+  }));
+
+  resultSaved.current = false;
+}
+
+function onTypeChange(type: string) {
+  setSettings(prev => ({
+    ...prev,
+    type,
+  }));
+}
+
+function onSelectorChange(selector: number) {
+  setSettings(prev => ({
+    ...prev,
+    selector,
+  }));
+
+  resultSaved.current = false;
+}
+
+
+
 
   const resultSaved = useRef(false);
 
@@ -41,19 +76,9 @@ export default function HomeWindow() {
     getWpms,
   } = useTypingTest(text);
 
-  function onModeChange(mode: string) {
-    setMode(mode);
-    resultSaved.current = false;
-  }
 
-  function onTypeChange(type: string) {
-    setType(type);
-  }
 
-  function onSelectorChange(selector: number) {
-    setSelector(selector);
-    resultSaved.current = false;
-  }
+
 
   const testFinished =
     mode === "time"
@@ -102,19 +127,39 @@ export default function HomeWindow() {
       selector,
     };
 
+     // Create alerts for this test
+  const alerts: {
+    type: AlertType;
+    title: string;
+    msg: string;
+  }[] = [];
 
-    // Save first
+  // Save result
+  if (rawAcc > 50 && consistency > 40) {
     saveTestResult(result);
 
-    if(type !== "practice mistakes") {
-    saveMistakes(
-      result.wrongWords,
-      result.wrongLetters
-    );
+    if (type !== "practice mistakes") {
+      saveMistakes(
+        result.wrongWords,
+        result.wrongLetters
+      );
+    }
+  } else {
+    alerts.push({
+      type: "error",
+      title: "Error",
+      msg: "Test was not saved because the test was inconsistent.",
+    });
+    alerts.push({
+      type: "info",
+      title: "notice",
+      msg: "mistakes words are skipped as result is not saved"
+    })
   }
+
     // Then navigate
     navigate("/result", {
-      state: result,
+      state: {...result , alerts},
     });
   }, [
     testFinished,
@@ -134,17 +179,17 @@ export default function HomeWindow() {
   ]);
 
   return (
-    <>
+    <div className="flex h-screen flex-col">
       <ToolBar
         onModeChange={onModeChange}
         onTypeChange={onTypeChange}
         onSelectorChange={onSelectorChange}
+        mode={mode}
+        type={type}
+        selector={selector}
       />
-
-      <span className="text-white">{type}</span>
-      <span className="text-white">{mode}</span>
-      <span className="text-white">{selector}</span>
-
+      <main className="flex flex-1 items-center justify-center">
+      <div className="-translate-y-24 w-full">
       <TestArea
         timeorwords={selector}
         text={text}
@@ -156,7 +201,8 @@ export default function HomeWindow() {
         wpm={wpm}
         elapsedTime={elapsedTime}
         timerStarted={startedTimer}
-      />
-    </>
+        /></div>
+        </main>
+    </div>
   );
 }

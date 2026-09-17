@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "../theme/ThemeContext";
 import { themes } from "../theme/themes";
+import { testsDummy } from "../dummydata/testdummy";
 
 function NavLink({
   to,
@@ -44,6 +45,13 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
+  function loadDummyData() {
+    localStorage.setItem(
+  "typing-test-results",
+  JSON.stringify(testsDummy)
+);
+  }
+
   return (
     <div>
       {/* ================= HEADER ================= */}
@@ -71,7 +79,9 @@ export default function Header() {
             <Keyboard size={19} />
           </NavLink>
 
-          <Crown size={20} className="text-[var(--text-secondary)]" />
+          <button onClick={() => loadDummyData()}>
+            <Crown size={20} className="text-[var(--text-secondary)]" />
+          </button>
 
           <NavLink to="/dashboard" title="dashboard">
             <BarChart3 size={20} />
