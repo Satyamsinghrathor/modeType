@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "../theme/ThemeContext";
 import { themes } from "../theme/themes";
-import { testsDummy } from "../dummydata/testdummy";
+
 
 function NavLink({
   to,
@@ -45,12 +45,7 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  function loadDummyData() {
-    localStorage.setItem(
-  "typing-test-results",
-  JSON.stringify(testsDummy)
-);
-  }
+
 
   return (
     <div>
