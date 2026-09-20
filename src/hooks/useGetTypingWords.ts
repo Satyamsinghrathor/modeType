@@ -1,4 +1,5 @@
-import { Strings } from "../data/Strings";
+
+import typingWords from "../data/typingWords";
 import { getMistakeStatistics } from "../localstorage/mistakeStorage";
 
 type GetTypingWordsProps = {
@@ -7,7 +8,7 @@ type GetTypingWordsProps = {
   type: string;
 };
 
-const words = Strings.split(/\s+/);
+const words = typingWords;
 
 function getTypingWords({
   mode,
