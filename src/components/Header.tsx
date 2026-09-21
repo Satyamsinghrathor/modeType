@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Bell,
@@ -10,8 +10,7 @@ import {
   Info,
   Settings,
 } from "lucide-react";
-import { useTheme } from "../theme/ThemeContext";
-import { themes } from "../theme/themes";
+
 
 
 function NavLink({
@@ -42,8 +41,8 @@ function NavLink({
 }
 
 export default function Header() {
-  const { theme, setTheme } = useTheme();
-  const [settingsOpen, setSettingsOpen] = useState(false);
+
+
 
 
 
@@ -91,48 +90,14 @@ export default function Header() {
           <Info size={19} className="text-[var(--text-secondary)]" />
 
           {/* Theme picker */}
-          <div className="relative">
-            <button
-              onClick={() => setSettingsOpen((open) => !open)}
-              title="theme"
-              className={
-                settingsOpen
-                  ? "text-[var(--accent)]"
-                  : "text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
-              }
-            >
-              <Settings size={20} />
-            </button>
 
-            {settingsOpen && (
-              <div className="absolute left-0 top-9 z-20 w-44 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-2 shadow-xl">
-                <div className="mb-2 px-2 text-[11px] uppercase tracking-wide text-[var(--text-muted)]">
-                  theme
-                </div>
 
-                {themes.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => {
-                      setTheme(t.id);
-                      setSettingsOpen(false);
-                    }}
-                    className={`flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition ${
-                      theme === t.id
-                        ? "bg-[var(--bg-elevated)] text-[var(--accent)]"
-                        : "text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]/60"
-                    }`}
-                  >
-                    <span
-                      className="h-3 w-3 rounded-full border border-[var(--border)]"
-                      style={{ backgroundColor: t.swatch }}
-                    />
-                    {t.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+
+            <NavLink to="/settings" title="settings">
+                          <Settings size={20} />
+
+          </NavLink>
+
         </nav>
 
         {/* User */}

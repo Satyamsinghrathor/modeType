@@ -12,6 +12,7 @@ import HomeWindow from "./components/homescreen/HomeWindow";
 import TestResult from "./components/resultscreen/ResultScreen";
 import Dashboard from "./components/dashboard/Dashboard";
 import UserStatistics from "./components/userstatistics/UserStatistics";
+import Settings from "./components/settingsscreen/Settings";
 
 function ResultRoute() {
   const { state } = useLocation();
@@ -40,6 +41,7 @@ function App() {
           <Route path="/result" element={<ResultRoute />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/statistics" element={<UserStatistics />} />
+          <Route path="/settings"  element= {<Settings/>} />
         </Route>
       </Routes>
     </BrowserRouter>

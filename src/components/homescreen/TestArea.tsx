@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { getmodeTypeTime } from "../../localstorage/modetypetimeStorage";
 
 type TestAreaParams = {
   text: string;
@@ -28,6 +29,8 @@ export default function TestArea({
   const charRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   const [offset, setOffset] = useState(0);
+
+  const showWpm = getmodeTypeTime().showWpm;
 
   const [caretPosition, setCaretPosition] = useState({
     left: 0,
@@ -89,9 +92,9 @@ export default function TestArea({
                     : `${Math.floor(wordsTyped)}/${selector}`}
                 </span>
 
-                <span className="text-2xl font-semibold text-[var(--caret)]">
+{                showWpm && <span className="text-2xl font-semibold text-[var(--caret)]">
                   {wpm} WPM
-                </span>
+                </span>}
               </>
             ) : (
               <span className="text-2xl font-semibold text-[var(--caret)]">
@@ -124,14 +127,14 @@ export default function TestArea({
                   charRefs.current[index] = el;
                 }}
                 className={
-                  index < currentIndex
-                    ? textArray[index] === 1
-                      ? "text-[var(--text-primary)]"
-                      : textArray[index] === 0
-                        ? "text-[var(--error)]"
-                        : "text-[var(--text-secondary)]"
-                    : "text-[var(--text-muted)]"
-                }
+  index < currentIndex
+    ? textArray[index] === 1
+      ? "text-[var(--text-primary)]"
+      : textArray[index] === 0
+        ? "text-[var(--error)] underline decoration-[var(--error)]"
+        : "text-[var(--text-secondary)] underline decoration-[var(--error)]"
+    : "text-[var(--text-muted)]"
+}
               >
                 {char}
               </span>

@@ -4,12 +4,14 @@ export type ModeTypeSelector = {
   mode: string;
   type: string;
   selector: number;
+  showWpm: boolean;
 };
 
 const DEFAULT_VALUES: ModeTypeSelector = {
   mode: "time",
   type: "none",
   selector: 15,
+  showWpm: true,
 };
 
 export function getmodeTypeTime(): ModeTypeSelector {
@@ -26,6 +28,7 @@ export function getmodeTypeTime(): ModeTypeSelector {
       mode: parsed.mode ?? DEFAULT_VALUES.mode,
       type: parsed.type ?? DEFAULT_VALUES.type,
       selector: parsed.selector ?? DEFAULT_VALUES.selector,
+      showWpm: parsed.showWpm ?? DEFAULT_VALUES.showWpm,
     };
   } catch {
     return DEFAULT_VALUES;
