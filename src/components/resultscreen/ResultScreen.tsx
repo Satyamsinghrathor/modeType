@@ -25,6 +25,8 @@ type TestResultProps = {
   rawwpm: number;
   accuracy: number;
   rawaccuracy: number;
+  currentErrors: number;
+  currentSkipped: number;
   errors: number;
   skipped: number;
   elapsedTime: number;
@@ -32,6 +34,7 @@ type TestResultProps = {
   wrongWords: string[];
   wrongLetters: string[];
   wpms: number[];
+  rawWpms: number[];
   consistency: number;
   mode: string;
   type: string;
@@ -45,6 +48,8 @@ export default function TestResult({
   rawwpm,
   accuracy,
   rawaccuracy,
+    currentErrors,
+    currentSkipped,
   errors,
   skipped,
   elapsedTime,
@@ -52,8 +57,9 @@ export default function TestResult({
   wrongWords,
   wrongLetters,
   wpms,
+  rawWpms,
   consistency,
-            mode,
+  mode,
           type,
           selector,
           alerts
@@ -111,11 +117,12 @@ export default function TestResult({
 
   const characters = wordsTyped * 5;
 
-  const characterStats = `${characters}/${errors}/${skipped}/0`;
+  const characterStats = `${characters}/${currentErrors}/${currentSkipped}/0`;
 
   const chartData = wpms.map((value, index) => ({
     second: index + 1,
     wpm: value,
+    rawWpm: rawWpms[index] ?? 0,
   }));
 
   return (
@@ -208,6 +215,7 @@ export default function TestResult({
                       stroke="var(--border-soft)"
                       strokeDasharray="3 3"
                     />
+
                     <XAxis
                       dataKey="second"
                       stroke="var(--text-muted)"
@@ -220,7 +228,12 @@ export default function TestResult({
                         fontSize: 11,
                       }}
                     />
-                    <YAxis stroke="var(--text-muted)" tick={{ fontSize: 12 }} />
+
+                    <YAxis
+                      stroke="var(--text-muted)"
+                      tick={{ fontSize: 12 }}
+                    />
+
                     <Tooltip
                       contentStyle={{
                         background: "var(--bg-secondary)",
@@ -228,14 +241,33 @@ export default function TestResult({
                         borderRadius: 8,
                         color: "var(--text-primary)",
                       }}
-                      formatter={(value: number) => [Math.round(value), "wpm"]}
-                      labelFormatter={(label) => `second ${label}`}
+                      formatter={(value: number, name: string) => [
+                        Math.round(value),
+                        name === "wpm" ? "WPM" : "Raw WPM",
+                      ]}
+                      labelFormatter={(label) =>
+                        `second ${label}`
+                      }
                     />
+
+                    {/* Corrected WPM */}
                     <Line
                       type="monotone"
                       dataKey="wpm"
+                      name="wpm"
                       stroke="var(--accent)"
                       strokeWidth={2}
+                      dot={false}
+                    />
+
+                    {/* Raw WPM */}
+                    <Line
+                      type="monotone"
+                      dataKey="rawWpm"
+                      name="rawWpm"
+                      stroke="var(--accent)"
+                      strokeWidth={2}
+                      strokeDasharray="6 4"
                       dot={false}
                     />
                   </LineChart>

@@ -66,6 +66,8 @@ function onSelectorChange(selector: number) {
     currentIndex,
     errors,
     skipped,
+    currentErrors,
+    currentSkipped,
     textArray,
     elapsedTime,
     wordsTyped,
@@ -74,6 +76,7 @@ function onSelectorChange(selector: number) {
     wrongWords,
     wrongLetters,
     getWpms,
+    getRawWpms
   } = useTypingTest(text);
 
 
@@ -93,6 +96,7 @@ function onSelectorChange(selector: number) {
     resultSaved.current = true;
 
     const wpms = getWpms();
+    const rawWpms = getRawWpms()
 
     const {
       wpm,
@@ -116,11 +120,14 @@ function onSelectorChange(selector: number) {
       rawaccuracy: rawAcc,
       errors,
       skipped,
+        currentErrors,
+  currentSkipped,
       elapsedTime,
       wordsTyped: Math.floor(wordsTyped),
       wrongWords,
       wrongLetters,
       wpms,
+      rawWpms,
       consistency,
       mode,
       type,
