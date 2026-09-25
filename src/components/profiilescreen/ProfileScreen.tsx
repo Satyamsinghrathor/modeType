@@ -140,14 +140,14 @@ export default function ProfileScreen() {
    *
    * This is ready for your future edit-profile UI.
    */
-  const saveProfile = (updatedProfile: ProfileData) => {
-    setProfile(updatedProfile);
+  // const saveProfile = (updatedProfile: ProfileData) => {
+  //   setProfile(updatedProfile);
 
-    localStorage.setItem(
-      "typing-profile",
-      JSON.stringify(updatedProfile)
-    );
-  };
+  //   localStorage.setItem(
+  //     "typing-profile",
+  //     JSON.stringify(updatedProfile)
+  //   );
+  // };
 
   const onCancel = () => {
     setIsDeleting(false)
