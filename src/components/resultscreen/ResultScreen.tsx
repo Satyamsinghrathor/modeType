@@ -41,6 +41,7 @@ type TestResultProps = {
   selector: number;
   resultSaved: boolean;
   alerts: AlertData[];
+  sessionTime: number;
 };
 
 export default function TestResult({
@@ -48,8 +49,8 @@ export default function TestResult({
   rawwpm,
   accuracy,
   rawaccuracy,
-    currentErrors,
-    currentSkipped,
+  currentErrors,
+  currentSkipped,
   errors,
   skipped,
   elapsedTime,
@@ -60,9 +61,10 @@ export default function TestResult({
   rawWpms,
   consistency,
   mode,
-          type,
-          selector,
-          alerts
+  type,
+  selector,
+  alerts,
+  sessionTime
 }: TestResultProps) {
 
   const navigate = useNavigate()
@@ -330,7 +332,7 @@ export default function TestResult({
             <Metric
               label="time"
               value={formatTime(elapsedTime)}
-              subValue={`${formatElapsedTime(elapsedTime)} session`}
+              subValue={`${formatElapsedTime(sessionTime)} session`}
             />
           </div>
 

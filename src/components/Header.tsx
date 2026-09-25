@@ -104,17 +104,19 @@ export default function Header() {
         <div className="flex items-center gap-5">
           <Bell size={19} className="text-[var(--text-secondary)]" />
 
-          <div className="flex items-center gap-2">
-            <User size={18} className="text-[var(--text-secondary)]" />
-
-            <span className="text-sm text-[var(--text-primary)]">
-              satyam_0_7
-            </span>
-
-            <span className="rounded bg-[var(--bg-elevated)] px-2 py-0.5 text-xs text-[var(--text-primary)]">
-              115
-            </span>
-          </div>
+          <nav>
+            <NavLink to="/profile" title="ProfileScreen">
+              <div className="flex items-center gap-2">
+                <User size={18} className="text-[var(--text-secondary)]" />
+                <span className="text-sm text-[var(--text-primary)]">
+                  user01
+                </span>
+                <span className="rounded bg-[var(--bg-elevated)] px-2 py-0.5 text-xs text-[var(--text-primary)]">
+                  level
+                </span>
+              </div>
+            </NavLink>
+          </nav>
         </div>
       </header>
     </div>

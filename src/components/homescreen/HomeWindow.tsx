@@ -10,7 +10,12 @@ import { saveMistakes } from "../../localstorage/mistakeStorage";
 import type { AlertType } from "../ui/Alert";
 import { getmodeTypeTime, saveModeTypeTime, type ModeTypeSelector } from "../../localstorage/modetypetimeStorage";
 
-export default function HomeWindow() {
+type HomeWindowProps = {
+  sessionTime : number;
+  addSessionTime : (time: number) => void;
+}
+
+export default function HomeWindow({sessionTime , addSessionTime}: HomeWindowProps) {
   const navigate = useNavigate();
 const [settings, setSettings] = useState<ModeTypeSelector>(
   () => getmodeTypeTime()
@@ -88,60 +93,67 @@ function onSelectorChange(selector: number) {
       ? elapsedTime >= selector
       : wordsTyped >= selector;
 
-  useEffect(() => {
-    if (!testFinished || resultSaved.current) {
-      return;
-    }
+useEffect(() => {
+  if (!testFinished || resultSaved.current) {
+    return;
+  }
 
-    resultSaved.current = true;
+  resultSaved.current = true;
 
-    const wpms = getWpms();
-    const rawWpms = getRawWpms()
+  const wpms = getWpms();
+  const rawWpms = getRawWpms();
 
-    const {
-      wpm,
-      rawwpm,
-      accuracy,
-      rawAcc,
-      consistency,
-    } = calculateResult({
-      currentIndex,
-      errors,
-      skipped,
-      elapsedTime,
-      textArray,
-      wpms,
-    });
+  const {
+    wpm,
+    rawwpm,
+    accuracy,
+    rawAcc,
+    consistency,
+  } = calculateResult({
+    currentIndex,
+    errors,
+    skipped,
+    elapsedTime,
+    textArray,
+    wpms,
+  });
 
-    const result = {
-      wpm,
-      rawwpm,
-      accuracy,
-      rawaccuracy: rawAcc,
-      errors,
-      skipped,
-        currentErrors,
-  currentSkipped,
-      elapsedTime,
-      wordsTyped: Math.floor(wordsTyped),
-      wrongWords,
-      wrongLetters,
-      wpms,
-      rawWpms,
-      consistency,
-      mode,
-      type,
-      selector,
-    };
+  // Calculate the session time BEFORE updating state
+  const newSessionTime = sessionTime + elapsedTime;
 
-     // Create alerts for this test
+  // Update session state
+  addSessionTime(elapsedTime);
+
+  const result = {
+    wpm,
+    rawwpm,
+    accuracy,
+    rawaccuracy: rawAcc,
+    errors,
+    skipped,
+    currentErrors,
+    currentSkipped,
+    elapsedTime,
+    wordsTyped: Math.floor(wordsTyped),
+    wrongWords,
+    wrongLetters,
+    wpms,
+    rawWpms,
+    consistency,
+    mode,
+    type,
+    selector,
+
+    // Use the new value
+    sessionTime: newSessionTime,
+  };
+
   const alerts: {
     type: AlertType;
     title: string;
     msg: string;
   }[] = [];
 
-  // Save result
   if (rawAcc > 50 && consistency > 40) {
     saveTestResult(result);
 
@@ -157,33 +169,41 @@ function onSelectorChange(selector: number) {
       title: "Error",
       msg: "Test was not saved because the test was inconsistent.",
     });
+
     alerts.push({
       type: "info",
       title: "notice",
-      msg: "mistakes words are skipped as result is not saved"
-    })
+      msg: "mistake words are skipped as result is not saved",
+    });
   }
 
-    // Then navigate
-    navigate("/result", {
-      state: {...result , alerts},
-    });
-  }, [
-    testFinished,
-    currentIndex,
-    errors,
-    skipped,
-    elapsedTime,
-    textArray,
-    wordsTyped,
-    wrongWords,
-    wrongLetters,
-    mode,
-    type,
-    selector,
-    getWpms,
-    navigate,
-  ]);
+  navigate("/result", {
+    state: {
+      ...result,
+      alerts,
+    },
+  });
+}, [
+  testFinished,
+  currentIndex,
+  errors,
+  skipped,
+  elapsedTime,
+  textArray,
+  wordsTyped,
+  wrongWords,
+  wrongLetters,
+  currentErrors,
+  currentSkipped,
+  mode,
+  type,
+  selector,
+  getWpms,
+  getRawWpms,
+  navigate,
+  sessionTime,
+  addSessionTime,
+]);
 
 return (
   <div className="relative flex h-screen flex-col">
