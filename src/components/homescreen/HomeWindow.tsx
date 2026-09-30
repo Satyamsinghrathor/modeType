@@ -21,6 +21,8 @@ const [settings, setSettings] = useState<ModeTypeSelector>(
   () => getmodeTypeTime()
 );
 
+const [restart, setRestart] = useState(0)
+
 const { mode, type, selector } = settings;
 
 useEffect(() => {
@@ -53,7 +55,11 @@ function onSelectorChange(selector: number) {
 }
 
 
-
+function restartTests(){
+  setRestart(prev => prev+1)
+  console.log(restart);
+  
+}
 
   const resultSaved = useRef(false);
 
@@ -63,7 +69,7 @@ function onSelectorChange(selector: number) {
       timeOrWords: selector,
       type
     });
-  }, [mode, selector,type]);
+  }, [mode, selector,type, restart]);
 
   const text = texts.join(" ");
 
@@ -82,7 +88,7 @@ function onSelectorChange(selector: number) {
     wrongLetters,
     getWpms,
     getRawWpms
-  } = useTypingTest(text);
+  } = useTypingTest(text , restartTests);
 
 
 

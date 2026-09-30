@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useTypingTest(text: string) {
+export function useTypingTest(text: string , restartTests: () => void) {
   /*
    * ==========================================
    * STATE
@@ -76,7 +76,7 @@ export function useTypingTest(text: string) {
    */
   const skippedRef = useRef(0);
 
-  /*
+  /*second
    * Currently unresolved skipped.
    * Can decrease.
    */
@@ -155,9 +155,12 @@ export function useTypingTest(text: string) {
 
     setElapsedTime(0);
     setStartedTimer(false);
-
     setWrongWords([]);
     setWrongLetters([]);
+    // console.log("before restartTests");
+    
+    restartTests()
+    // console.log("before restartTests");
   }
 
   /*
